@@ -8,6 +8,7 @@
 import SpriteKit
 import GameplayKit
 
+
 class GameScene: SKScene, SKPhysicsContactDelegate {
     var ball = SKShapeNode()
     var paddle = SKSpriteNode()
@@ -123,10 +124,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //now figure the number and spacing of each brick
         let count = Int(frame.width) / 55 //bricks per row
         let xOffset = (Int(frame.width) - (count * 55)) / 2 + Int(frame.minX) + 25
-        let y = Int(frame.maxY) - 65
-        for i in 0..<count {
-            let x = i * 55 + xOffset
-            makeBrick(x: x, y: y, color: .green)
+        let colors: [UIColor] = [.red, .orange, .yellow]
+        for r in 0..<3{
+            let y = Int(frame.maxY) - 65 - (r * 25)
+            for i in 0..<count {
+                let x = i * 55 + xOffset
+                makeBrick(x: x, y: y, color: colors[r])
+            }
         }
     }
     
