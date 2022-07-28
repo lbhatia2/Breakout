@@ -42,7 +42,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func kickBall() {
         ball.physicsBody?.isDynamic = true
-        ball.physicsBody?.applyImpulse(CGVector(dx: 3, dy: 5))
+        ball.physicsBody?.applyImpulse(CGVector(dx: Int.random(in: -5...5), dy: 5))
     }
     
     func updateLabels() {
@@ -51,9 +51,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func createBackground() {
-        let stars = SKTexture(imageNamed: "Stars")
+        let cool = SKTexture(imageNamed: "cool")
         for i in 0...1 {
-            let starsBackground = SKSpriteNode(texture: stars)
+            let starsBackground = SKSpriteNode(texture: cool)
             starsBackground.zPosition = -1
             starsBackground.position = CGPoint(x: 0, y: starsBackground.size.height * CGFloat(i))
             addChild(starsBackground)
@@ -124,7 +124,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //now figure the number and spacing of each brick
         let count = Int(frame.width) / 55 //bricks per row
         let xOffset = (Int(frame.width) - (count * 55)) / 2 + Int(frame.minX) + 25
-        let colors: [UIColor] = [.red, .orange, .yellow]
+        let colors: [UIColor] = [.purple, .blue, .red]
         for r in 0..<3{
             let y = Int(frame.maxY) - 65 - (r * 25)
             for i in 0..<count {
@@ -135,7 +135,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func makeLoseZone() {
-        loseZone = SKSpriteNode(color: .red, size: CGSize(width: frame.width, height: 50))
+        loseZone = SKSpriteNode(color: .blue, size: CGSize(width: frame.width, height: 50))
         loseZone.position = CGPoint(x: frame.midX, y: frame.minY + 25)
         loseZone.name = "loseZone"
         loseZone.physicsBody = SKPhysicsBody(rectangleOf: loseZone.size)
@@ -200,11 +200,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if contact.bodyA.node == brick || contact.bodyB.node == brick {
                 score += 1
                 updateLabels()
-                brick.removeFromParent()
-                removedBricks += 1
-                if removedBricks == bricks.count{
-                    gameOver(winner: true)
+                if brick.color == .purple{
+                    brick.color = .blue
                 }
+                else if brick.color == .blue{
+                    brick.color = .red
+                }
+                else{
+                    brick.removeFromParent()
+                    removedBricks += 1
+                    if removedBricks == bricks.count{
+                        gameOver(winner: true)
+                    }
+                }
+                //increases speed
+                ball.physicsBody!.velocity.dx *= CGFloat(1.02)
+                ball.physicsBody!.velocity.dy *= CGFloat(1.02)
+                updateLabels()
+                
             }
         }
         if contact.bodyA.node?.name == "loseZone" || contact.bodyB.node?.name == "loseZone" {
