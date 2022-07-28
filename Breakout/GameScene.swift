@@ -19,7 +19,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var playingGame = false
     var score = 0
     var lives = 3
-        
+    
     override func didMove(to view: SKView) {
         //this stuff happens once (when the app open)
         physicsWorld.contactDelegate = self
@@ -143,7 +143,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for touch in touches {
             let location = touch.location(in: self)
             if playingGame {
-            paddle.position.x = location.x
+                paddle.position.x = location.x
             }
             else {
                 for node in nodes(at: location) {
@@ -165,20 +165,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for touch in touches {
             let location = touch.location(in: self)
             if playingGame {
-            paddle.position.x = location.x
+                paddle.position.x = location.x
             }
         }
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
         if contact.bodyA.node?.name == "brick" || contact.bodyB.node?.name == "brick" {
-            print("you win!!")
-            brick.removeFromParent()
-            ball.removeFromParent()
+           gameOver(winner: true)
         }
         if contact.bodyA.node?.name == "loseZone" || contact.bodyB.node?.name == "loseZone" {
-            print("you lose!")
-            ball.removeFromParent()
+            gameOver(winner: false)
+        }
+    }
+    
+    func gameOver(winner: Bool) {
+        playingGame = false
+        playLabel.alpha = 1
+        resetGame()
+        if winner {
+            playLabel.text = "You win! Tap to play again"
+        }
+        else{
+            playLabel.text = "You're a noob why you playing? "
         }
     }
 }
