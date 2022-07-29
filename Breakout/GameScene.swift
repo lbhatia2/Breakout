@@ -57,7 +57,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             starsBackground.zPosition = -1
             starsBackground.position = CGPoint(x: 0, y: starsBackground.size.height * CGFloat(i))
             addChild(starsBackground)
-            let moveDown = SKAction.moveBy(x: 0, y: -starsBackground.size.height, duration: 20)
+            let moveDown = SKAction.moveBy(x: 0, y: -starsBackground.size.height, duration: 15)
             let moveReset = SKAction.moveBy(x: 0, y: starsBackground.size.height, duration: 0)
             let moveLoop = SKAction.sequence([moveDown, moveReset])
             let moveForever = SKAction.repeatForever(moveLoop)
@@ -152,12 +152,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(playLabel)
         
         livesLabel.fontSize = 18
-        livesLabel.fontColor = .black
+        livesLabel.fontColor = .white
+        livesLabel.fontName = "Arial"
         livesLabel.position = CGPoint(x: frame.minX + 50, y: frame.minY + 18)
         addChild(livesLabel)
         
         scoreLabel.fontSize = 18
-        livesLabel.fontColor = .black
+        scoreLabel.fontColor = .white
         scoreLabel.fontName = "Arial"
         scoreLabel.position = CGPoint(x: frame.maxX - 50, y: frame.minY + 18)
         addChild(scoreLabel)
@@ -214,8 +215,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     }
                 }
                 //increases speed
-                ball.physicsBody!.velocity.dx *= CGFloat(1.02)
-                ball.physicsBody!.velocity.dy *= CGFloat(1.02)
+                ball.physicsBody!.velocity.dx *= CGFloat(1.0)
+                ball.physicsBody!.velocity.dy *= CGFloat(1.0)
                 updateLabels()
                 
             }
@@ -241,18 +242,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             playLabel.text = "You win! Tap to play again"
         }
         else{
-            playLabel.text = "You're a noob why you playing? "
+            playLabel.text = "You lost! Tap to play again "
         }
     }
-    override func update(_ currentTime: TimeInterval) {
-        if abs(ball.physicsBody!.velocity.dx) < 100 {
-            // ball has stalled in x direction so kick it randomly horizontly
-            ball.physicsBody?.applyImpulse(CGVector(dx: 0, dy: Int.random(in: -3...3)))
-        }
-        if abs(ball.physicsBody!.velocity.dy) < 100 {
-            //ball has stalled in y direction so kick it randomly
-            ball.physicsBody?.applyImpulse(CGVector(dx: 0, dy: Int.random(in: -3...3)))
-        }
-    }
+  
 }
 
